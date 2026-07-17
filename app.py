@@ -126,6 +126,31 @@ else:
         st.rerun()
 
 
+
+
+# CGPA trend chart
+
+if len(st.session_state.semester_history) > 0:
+    running_credits = 0
+    running_points = 0
+    chart_rows = []
+
+    for entry in st.session_state.semester_history:
+        running_points += entry["gpa"] * entry["credits"]
+        running_credits += entry["credits"]
+        cumulative_cgpa = running_points / running_credits
+
+        chart_rows.append({
+            "Semester": entry["label"],
+            "Semester GPA": entry["gpa"],
+            "Cumulative CGPA": cumulative_cgpa,
+        })
+
+    chart_df = pd.DataFrame(chart_rows).set_index("Semester")
+    st.sidebar.line_chart(chart_df)
+
+
+
 # CGPA calculator
 
 st.divider()
